@@ -1,4 +1,5 @@
 import re
+import warnings
 
 
 HEADERS = {'authority': 'twitter.com',
@@ -30,8 +31,14 @@ def parse_header(tweet_cardwrap):
 
     tms = tweet_cardwrap.find('span', re.compile('timestamp')).attrs.get('data-time', '')
 
-    icon = tweet_cardwrap.find('div', class_=re.compile('context')) # .find('span', re.compile('Icon--(reply|retweeted)'))
-    status = icon.get_text(strip=True) if icon else ''
+    icon = tweet_cardwrap.find('div', class_=re.compile('context'))
+    status = ''
+    if icon:
+        if icon.find('span', class_=re.compile('retweet')):
+            status = 'retweeted by '
+        elif icon.find('span', re.compile('reply')):
+            status = 'replied to '
+        status += icon.find('a', class_=re.compile('user-profile')).attrs['href'][1:]
 
     geo = tweet_cardwrap.find('span', re.compile('Tweet-geo'))
     if geo:
@@ -52,7 +59,7 @@ def parse_text(tweet_cardwrap, tag='p'):
     [a.extract() for a in textwrap.find_all('a', re.compile('u-hidden|twitter-timeline-link'))]
     [a.replace_with(a.text) for a in textwrap.find_all('a', re.compile('hashtag|atreply'))]
     language = textwrap.attrs.get('lang')
-    return [language, textwrap.get_text(' ', strip=True).encode('utf-8')]
+    return [language, textwrap.get_text(' ', strip=True)]
 
 
 def parse_footer(tweet_cardwrap):
@@ -71,7 +78,7 @@ def parse_quote(tweet_cardwrap):
     quote = tweet_cardwrap.find('div', re.compile('QuoteTweet-container'))
     if quote:
         href = quote.find('a', re.compile('QuoteTweet-link')).attrs.get('href')
-        lang, text = parse_text(quote, 'div')
+        lang, text = parse_text(quote, 'div')[1:]
         return 'quote: ' + href, text
     else:
         return '', ''

@@ -2,9 +2,10 @@ import warnings
 
 
 def read_job(job):
-    jobs = ['timeline', 'threads']
-    if job in set(jobs):
-        return job
+    extensions = {'timeline': '.tml',
+                  'threads': '.trd'}
+    if job in set(extensions):
+        return job, extensions[job]
     else:
         raise LookupError('Job options:\ttimeline threads')
 

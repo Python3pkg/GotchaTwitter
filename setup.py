@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'gotchatwitter',
-    version = '0.0.9',
+    version = '0.0.12',
     keywords = ('twitter', 'python', 'crawler', 'web-scraping'),
     description = 'Crawling twitter in Python',
     license = 'MIT License',

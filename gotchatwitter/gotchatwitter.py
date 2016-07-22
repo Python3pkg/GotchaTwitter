@@ -23,9 +23,9 @@ class GotchaTwitter:
         :param output_delimiter: Default ','
         :param output_mode: Default 'a'
         """
-        self._job = read_job(job)
+        self._job, self._output_extension = read_job(job)
         self._input_fp, self._input = self.get_input(inputs, **kwargs)
-        self._output_fp = output_fp if output_fp else self._input_fp + '.' + self._job
+        self._output_fp = output_fp if output_fp else self._input_fp + self._output_extension
         self._output_delimiter = kwargs.get('output_delimiter', ',')
         self._output_mode = kwargs.get('output_mode', 'a')
         self._output_header = read_header(self._job, **kwargs)
@@ -50,6 +50,10 @@ class GotchaTwitter:
     def get_input(inputs, input_column=0, input_delimiter=',', input_start_from=None, **kwargs):
         # return input_fp, input_list
         input_fp = ''
+
+        if isinstance(inputs, list):
+            input_fp = '_'
+
         if isinstance(inputs, str):
             input_fp = inputs
             with open(input_fp, 'r') as i:
@@ -60,8 +64,6 @@ class GotchaTwitter:
                     inputs = [line[input_column.get('tid', 1)] + '@' +
                               line[input_column.get('uid', input_column.get('screen_name', 0))]
                               for line in csvreader]
-        if isinstance(inputs, list):
-            input_fp = '_'
 
         if input_start_from:
             try:
@@ -88,14 +90,15 @@ class GotchaTwitter:
                 _inputs.set_description(_input)
                 parsed_items = self.parse(_input)
 
-                try:
-                    for parsed_item in parsed_items:
-                        if parsed_item:
+                for parsed_item in parsed_items:
+                    if parsed_item:
+                        try:
                             csvwriter.writerow(parsed_item)
-                except Exception, e:
-                    print e
+                        except Exception, e:
+                            print parsed_item
+                            print e
 
 
 
-# GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w', date_since='2016-06-01', date_until='2016-07-15').crawl()
+GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w', date_since='2016-06-01', date_until='2016-07-15').crawl()
 
