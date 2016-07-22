@@ -79,7 +79,7 @@ def parse_quote(tweet_cardwrap):
     if quote:
         href = quote.find('a', re.compile('QuoteTweet-link')).attrs.get('href')
         lang, text = parse_text(quote, 'div')
-        return 'quote: ' + href[1:], text
+        return 'quote from ' + href[1:], text
     else:
         return '', ''
 

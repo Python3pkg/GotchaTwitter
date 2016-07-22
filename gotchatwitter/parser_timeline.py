@@ -66,8 +66,7 @@ def parse_user_timeline(u_screen_name, connector, header, **kwargs):
         if len(tweet_cardwraps) == 0:
             break
 
-        for c, tweet_cardwrap in enumerate(tweet_cardwraps):
-            print c
+        for tweet_cardwrap in tweet_cardwraps:
             status, uid, screen_name, tid, rid, timestamp, location_id, location_name = \
                 parse_header(tweet_cardwrap)
             language, text = parse_text(tweet_cardwrap)
