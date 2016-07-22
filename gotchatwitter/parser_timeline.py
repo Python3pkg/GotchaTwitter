@@ -76,6 +76,6 @@ def parse_user_timeline(u_screen_name, connector, header, **kwargs):
             status = quote_status if quote_status else status
             text = text + ' <quote> ' + quote_text + ' <quote>' if quote_text else text
             media = parse_media(tweet_cardwrap)
-            # yield [locals()[head].encode('utf-8') for head in header]
-            # if not tid_start:
-            #     tid_start = rid if rid else tid
+            yield [locals()[head].encode('utf-8') for head in header]
+            if not tid_start:
+                tid_start = rid if rid else tid
