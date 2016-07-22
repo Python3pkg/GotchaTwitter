@@ -33,7 +33,7 @@ def parse_header(tweet_cardwrap):
 
     icon = tweet_cardwrap.find('div', class_=re.compile('context'))
     status = ''
-    if icon:
+    if icon.get_text(strip=True):
         if icon.find('span', class_=re.compile('retweet')):
             status = 'retweeted by '
         elif icon.find('span', re.compile('reply')):
