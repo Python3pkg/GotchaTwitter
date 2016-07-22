@@ -4,13 +4,10 @@ from tqdm import tqdm
 from requestsplus import RequestsPlus
 from parser_utils import *
 from parser_timeline import parse_user_timeline
+from reader_utils import *
 
 
 class GotchaTwitter:
-    col_names_default = {
-        'timeline': ['status', 'uid', 'screen_name', 'tid', 'timestamp',
-                     'language', 'text', 'n_retweets', 'n_likes']
-    }
 
     def __init__(self, job, inputs, output_fp=None, **kwargs):
         """
@@ -26,14 +23,15 @@ class GotchaTwitter:
         :param output_delimiter: Default ','
         :param output_mode: Default 'a'
         """
-        self._job = job
+        self._job = read_job(job)
         self._input_fp, self._input = self.get_input(inputs, **kwargs)
         self._output_fp = output_fp if output_fp else self._input_fp + '.' + self._job
         self._output_delimiter = kwargs.get('output_delimiter', ',')
         self._output_mode = kwargs.get('output_mode', 'a')
-        self._output_header = kwargs.get('output_header', self.col_names_default.get(self._job))
+        self._output_header = read_header(self._job, **kwargs)
         self._output_has_header = True if self._output_mode == 'w' else False
         self._connector = RequestsPlus(header=HEADERS)
+        self.kwargs = kwargs
 
     def __enter__(self):
         return self
@@ -75,6 +73,10 @@ class GotchaTwitter:
             start_index = 0
         return input_fp, inputs[start_index:]
 
+    def parse(self, item):
+        parsers = {'timeline': parse_user_timeline(item, self._connector, self._output_header)}
+        return parsers.get(self._job)
+
     def crawl(self):
         with tqdm(self._input) as _inputs, open(self._output_fp, self._output_mode) as o:
             csvwriter = csv.writer(o, delimiter=self._output_delimiter)
@@ -93,9 +95,7 @@ class GotchaTwitter:
                 except Exception, e:
                     print e
 
-    def parse(self, item):
-        if self._job == 'timeline':
-            return parse_user_timeline(item, self._connector, header=self._output_header)
 
 
-# GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w').crawl()
+GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w').crawl()
+

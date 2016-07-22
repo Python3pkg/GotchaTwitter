@@ -1,8 +1,6 @@
-# PyCharm
 .idea
 
-# package
 dist
 *.egg-info
 
-
+*.pyc

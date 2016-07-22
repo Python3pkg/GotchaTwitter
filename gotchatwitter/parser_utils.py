@@ -19,6 +19,9 @@ HEADERS = {'authority': 'twitter.com',
 
 
 def parse_header(tweet_cardwrap):
+    """
+    return (status, uid, screen_name, tid, rid, tms, location_id, location_name) of a tweet
+    """
     properties = tweet_cardwrap.find('div', class_=re.compile(r'^tweet$')).attrs
     uid = properties.get('data-user-id', '')
     tid = properties.get('data-item-id', '')
@@ -27,12 +30,23 @@ def parse_header(tweet_cardwrap):
 
     tms = tweet_cardwrap.find('span', re.compile('timestamp')).attrs.get('data-time', '')
 
-    icon = tweet_cardwrap.find('div', class_=re.compile('context')).find('span', re.compile('Icon--(reply|retweeted)'))
-    status = ('retweet' if 'Icon--retweeted' in icon.attrs.get('class') else 'reply') if icon else ''
-    return [status, uid, screen_name, tid, rid, tms]
+    icon = tweet_cardwrap.find('div', class_=re.compile('context')) # .find('span', re.compile('Icon--(reply|retweeted)'))
+    status = icon.get_text(strip=True) if icon else ''
+
+    geo = tweet_cardwrap.find('span', re.compile('Tweet-geo'))
+    if geo:
+        location = geo.find('a', class_=re.compile('actionButton'))
+        location_id = location.attrs.get('data-place-id')
+        location_name = geo.attrs.get('title')
+    else:
+        location_id, location_name = '', ''
+    return [status, uid, screen_name, tid, rid, tms, location_id, location_name]
 
 
 def parse_text(tweet_cardwrap, tag='p'):
+    """
+    return (language, text) of a target tweet
+    """
     textwrap = tweet_cardwrap.find(tag, re.compile('tweet-text', re.IGNORECASE))
     [img.replace_with(img.attrs.get('alt')) for img in textwrap.find_all('img', re.compile('^Emoji$'))]
     [a.extract() for a in textwrap.find_all('a', re.compile('u-hidden|twitter-timeline-link'))]
@@ -42,11 +56,18 @@ def parse_text(tweet_cardwrap, tag='p'):
 
 
 def parse_footer(tweet_cardwrap):
+    """
+    return number of (retweets, likes)
+    """
     n_retweets = tweet_cardwrap.find('span', re.compile('retweet$')).span.attrs.get('data-tweet-stat-count')
     n_likes = tweet_cardwrap.find('span', re.compile('favorite$')).span.attrs.get('data-tweet-stat-count')
     return n_retweets, n_likes
 
+
 def parse_quote(tweet_cardwrap):
+    """
+    return (status, text) for quote
+    """
     quote = tweet_cardwrap.find('div', re.compile('QuoteTweet-container'))
     if quote:
         href = quote.find('a', re.compile('QuoteTweet-link')).attrs.get('href')
@@ -54,3 +75,16 @@ def parse_quote(tweet_cardwrap):
         return 'quote: ' + href, text
     else:
         return '', ''
+
+
+def parse_media(tweet_cardwrap):
+    """
+    return url of media
+    """
+    photo = tweet_cardwrap.find('div', class_=re.compile('Media-(singlePhoto|videoPreview)'))
+    if photo:
+        return photo.find('img').attrs.get('src')
+    video = tweet_cardwrap.find('div', class_=re.compile('Media-player'))
+    if video:
+        return re.search('\(\'(.*?)\'\)', video.attrs.get('style', '')).group(1)
+    return ''
