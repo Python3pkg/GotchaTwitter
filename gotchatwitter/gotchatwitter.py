@@ -97,5 +97,5 @@ class GotchaTwitter:
 
 
 
-GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w').crawl()
+# GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w').crawl()
 
