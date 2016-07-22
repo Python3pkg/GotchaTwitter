@@ -10,7 +10,7 @@ from parser_utils import *
 def parse_user_timeline(u_screen_name, connector, header, **kwargs):
     adv_search = kwargs.get('adv_search', dict())
     date_since = adv_search.get('date_since', kwargs.get('date_since', ''))
-    date_until = adv_search.get('date_until', kwargs.get('date_since', ''))
+    date_until = adv_search.get('date_until', kwargs.get('date_until', ''))
 
     tid_start = ''
     tid = ''

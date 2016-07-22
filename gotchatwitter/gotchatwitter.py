@@ -74,7 +74,7 @@ class GotchaTwitter:
         return input_fp, inputs[start_index:]
 
     def parse(self, item):
-        parsers = {'timeline': parse_user_timeline(item, self._connector, self._output_header)}
+        parsers = {'timeline': parse_user_timeline(item, self._connector, self._output_header, **self.kwargs)}
         return parsers.get(self._job)
 
     def crawl(self):
@@ -97,5 +97,5 @@ class GotchaTwitter:
 
 
 
-# GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w').crawl()
+GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w', date_since='2016-06-01', date_until='2016-07-15').crawl()
 
