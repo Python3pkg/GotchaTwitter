@@ -100,5 +100,5 @@ class GotchaTwitter:
 
 
 
-GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w', date_since='2016-06-01', date_until='2016-07-15').crawl()
+# GotchaTwitter('timeline', ['phantomkidding'], '/Volumes/cchen224/test.csv', output_mode='w', date_since='2016-06-01', date_until='2016-07-15').crawl()
 
