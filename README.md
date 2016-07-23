@@ -4,7 +4,7 @@ GotchaTwitter
 Dependencies
 ------
 - `bs4` Beautifulsoup
-- `lxml` Html parser for beautifulsoup ([having special installation method on Amazon EC2](### PushBullet))
+- `lxml` Html parser for beautifulsoup ([having special installation method on Amazon EC2](###PushBullet))
 - `tqdm` Progress bar in terminal
 - `requestsplus` Self-modified requests package with max retries and sleeping time between requests
 - `pushbullet.py` (optional) Notifier when crawling is finished.
