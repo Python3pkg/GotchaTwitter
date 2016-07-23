@@ -15,7 +15,7 @@ Notifier Setting
 ------
 ### PushBullet
 1. Register a [PushBullet](https://www.pushbullet.com/) account and create an access token in your account setting.
-2. Download Pushbullet app on your device (iOS tested).
+2. Download and install Pushbullet app on your device (iOS tested).
 
 Install lxml on Amazon Linux AMI (2016.03.3)  
 ------
