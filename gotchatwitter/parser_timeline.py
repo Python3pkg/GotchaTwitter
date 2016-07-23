@@ -60,7 +60,7 @@ def parse_user_timeline(u_screen_name, connector, header, **kwargs):
 
         soup = BeautifulSoup(html, 'lxml')
         tweet_cardwraps = soup.find_all(lambda tag: re.compile('js-stream-item').search(str(tag))
-                                                    and not re.compile('scroll-bump').search(str(tag))
+                                                    and not re.compile('scroll-bump|separationModule').search(str(tag))
                                                     and tag.name == 'li')
 
         if len(tweet_cardwraps) == 0:

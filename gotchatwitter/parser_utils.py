@@ -23,7 +23,7 @@ def parse_header(tweet_cardwrap):
     """
     return (status, uid, screen_name, tid, rid, tms, location_id, location_name) of a tweet
     """
-    properties = tweet_cardwrap.find('div', class_=re.compile(r'^tweet$')).attrs
+    properties = tweet_cardwrap.find('div', class_=re.compile('js-stream-tweet')).attrs
     uid = properties.get('data-user-id', '')
     tid = properties.get('data-item-id', '')
     screen_name = properties.get('data-screen-name', '')

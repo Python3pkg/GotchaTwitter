@@ -13,11 +13,15 @@ if __name__ == '__main__':
         start = ''
 
     for file in glob(inp):
-        gt = GotchaTwitter('timeline', file,
-                           date_since='2016-02-06', date_until='2016-02-10')
-        # a = TwitterCrawler('timeline').set_input(file, start_value=start).set_output(file + '.csv').set_progress_bar(2).set_notifier('gmail').set_date_range('2016-02-06', '2016-02-10')
-        #a = TwitterCrawler('info').set_input(file).set_output(file + '.csv').set_notifier('gmail')
-        try:
-            gt.crawl()
-        except KeyboardInterrupt:
-            break
+        with GotchaTwitter('timeline', file, output_fp='~/Downloads/test.csv', output_mode='w',
+                           date_since='2016-02-06', date_until='2016-02-10') as gt:
+			try:
+				gt.crawl()
+			except KeyboardInterrupt:
+				break
+
+file = ['phantomkidding']
+with GotchaTwitter('timeline', file, '/Users/cchen/Downloads/test.csv') as gt:
+	gt = gt.set_output(save_mode='w', has_header=True) \
+		.set_notifier('pushbullet', access_token='o.X7MEj0qDukl4uhj8EZ28K5tAY0P5c0c0')
+	gt.crawl()
