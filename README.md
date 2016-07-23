@@ -1,5 +1,9 @@
 GotchaTwitter
 ======
+A python twitter crawler.
+- Support on crawling timeline for a target user [in a certain date range].
+- `Developing` Support on crawling threads.
+- `Warning` Using TwitterAPI to get user information with uid/screen_name is much faster and safer than web-scraping method.
 
 Dependencies
 ------
