@@ -6,6 +6,6 @@ class Print_:
         pass
 
     def notify(self, title, message):
-        print title
-        print message
+        print(title)
+        print(message)
 

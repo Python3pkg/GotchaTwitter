@@ -4,7 +4,7 @@ from time import sleep
 
 from bs4 import BeautifulSoup
 
-from parser_utils import *
+from .parser_utils import *
 
 
 def parse_user_timeline(u_screen_name, connector, header, **kwargs):

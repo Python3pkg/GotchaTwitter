@@ -3,9 +3,9 @@ import warnings
 import traceback
 from tqdm import tqdm
 from requestsplus import RequestsPlus
-from parser_utils import *
-from parser_timeline import parse_user_timeline
-from reader_utils import *
+from .parser_utils import *
+from .parser_timeline import parse_user_timeline
+from .reader_utils import *
 from datetime import datetime
 
 
@@ -82,12 +82,12 @@ class GotchaTwitter:
                             if parsed_item:
                                 csvwriter.writerow(parsed_item)
                         except:
-                            print parsed_item
+                            print(parsed_item)
                 except KeyboardInterrupt:
                     break
                 except:
                     el.write(_input + '\n')
-                    print traceback.format_exc()
+                    print(traceback.format_exc())
 
     def set_input(self, input_column=0, input_delimiter=',', input_start_from=None):
         self._input_column = input_column

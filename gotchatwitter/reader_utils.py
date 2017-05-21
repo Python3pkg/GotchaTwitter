@@ -14,7 +14,7 @@ def read_job(job):
 def read_notifier(notifier_type, credential_fp=None, access_token=None):
 
     if not notifier_type:
-        from notifier_print import Print_
+        from .notifier_print import Print_
         return Print_()
 
     notifier_types = ['pushbullet']
@@ -22,7 +22,7 @@ def read_notifier(notifier_type, credential_fp=None, access_token=None):
         raise LookupError('Notifier type not found. Options: pushbullet.')
 
     if notifier_type.lower() == 'pushbullet':
-        from notifier_pushbullet import PushBullet_
+        from .notifier_pushbullet import PushBullet_
         if not access_token:
             try:
                 with open(credential_fp, 'r') as i:
